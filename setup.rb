@@ -42,3 +42,4 @@ ActiveRecord::Schema.define do
 end
 
 puts 'Setup DONE'
+# binding.pry
