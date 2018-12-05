@@ -41,5 +41,35 @@ ActiveRecord::Schema.define do
   end
 end
 
+class Store < ActiveRecord::Base
+  has_many :employees
+  validates :name,
+    length: {minimum: 3}  
+  validates :annual_revenue,
+    numericality: {only_integer: true,
+                  greater_than: 0}
+  validate :check_apparel ## singular to call a method
+  private
+  
+  def check_apparel
+    if !mens_apparel && !womens_apparel
+      errors.add(:apparel, "nothing sells in this store")
+    end  
+  end      
+
+end
+
+class Employee < ActiveRecord::Base
+  belongs_to :store
+  validates :first_name, presence:true
+  validates :last_name, presence:true
+  validates :hourly_rate, 
+    numericality: { only_integer: true,
+                    greater_than: 40, 
+                    less_than_or_equal_to: 200 }
+  validates_associated :store 
+  validates_presence_of :store
+end
+
 puts 'Setup DONE'
 # binding.pry
